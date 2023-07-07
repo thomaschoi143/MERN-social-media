@@ -1,5 +1,5 @@
 # MERN-social-media
-A social media website with user authentication using MERN, Material UI, dark mode, Redux, JWT...
+A social media website with user authentication(JWT, HTTP-cookie) and dark mode using MERN, Material UI, Redux(Redux Toolkit)...
 
 ## Preview
 <img width="1169" alt="Screen Shot 2023-07-06 at 6 13 44 pm" src="https://github.com/thomaschoi143/MERN-social-media/assets/24365822/bd5755cf-83d2-4c0f-9417-911832c1afa1">
