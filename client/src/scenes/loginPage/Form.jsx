@@ -5,9 +5,10 @@ import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "state";
+import { setLogin } from "slices/userSlice";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
+import { useLoginMutation, useRegisterMutation } from "slices/authApiSlice";
 
 const registerSchema = yup.object().shape({
 	firstName: yup.string().required("required"),
@@ -48,7 +49,10 @@ const Form = () => {
 	const isLogin = pageType === "login";
 	const isRegister = pageType === "register";
 
-	const register = async (values, onSubmitProps) => {
+	const [login] = useLoginMutation();
+	const [register, { isLoading, error }] = useRegisterMutation();
+
+	const registerHandler = async (values, onSubmitProps) => {
 		// allow us to send form info with image
 		const formData = new FormData();
 		for (let value in values) {
@@ -56,12 +60,7 @@ const Form = () => {
 		}
 		formData.append("picturePath", values.picture.name);
 
-		const savedUserResponse = await fetch("http://localhost:3001/auth/register", {
-			method: "POST",
-			body: formData,
-		});
-
-		const savedUser = await savedUserResponse.json();
+		const savedUser = await register(formData).unwrap();
 		onSubmitProps.resetForm();
 
 		if (savedUser) {
@@ -69,28 +68,23 @@ const Form = () => {
 		}
 	};
 
-	const login = async (values, onSubmitProps) => {
-		const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(values),
-		});
-		const loggedIn = await loggedInResponse.json();
+	const loginHandler = async (values, onSubmitProps) => {
+		const loggedIn = await login(values).unwrap();
 		onSubmitProps.resetForm();
+
 		if (loggedIn) {
 			dispatch(
 				setLogin({
 					user: loggedIn.user,
-					token: loggedIn.token,
 				})
 			);
-			navigate("/home");
+			navigate("/");
 		}
 	};
 
 	const handleFormSubmit = async (values, onSubmitProps) => {
-		if (isLogin) await login(values, onSubmitProps);
-		if (isRegister) await register(values, onSubmitProps);
+		if (isLogin) await loginHandler(values, onSubmitProps);
+		if (isRegister) await registerHandler(values, onSubmitProps);
 	};
 
 	return (

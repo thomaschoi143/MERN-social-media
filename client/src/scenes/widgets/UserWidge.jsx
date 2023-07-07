@@ -8,42 +8,42 @@ import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useSelector } from "react-redux";
-// import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 
-const UserWidget = ({ userId, picturePath }) => {
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useGetUserMutation } from "slices/usersApiSlice";
+
+const UserWidget = ({ user }) => {
 	const { palette } = useTheme();
 	const navigate = useNavigate();
-	const user = useSelector((state) => state.user);
-	const token = useSelector((state) => state.token);
+	const loggedInUser = useSelector((state) => state.user.userInfo);
+
 	const dark = palette.neutral.dark;
 	const medium = palette.neutral.medium;
 	const main = palette.neutral.main;
 
-	// const getUser = async () => {
-	// 	const response = await fetch(`http://localhost:3001/users/${userId}`, {
-	// 		method: "GET",
-	// 		headers: { Authorization: `Bearer ${token}` },
-	// 	});
-	// 	const data = await response.json();
-	// 	dispatchEvent(setUs)
-	// };
-
-	// useEffect(() => {
-	// 	getUser();
-	// }, []); // eslint-disable-line react-hooks/exhaustive-deps
+	const [getUserProfile] = useGetUserMutation();
 
 	if (!user) {
-		return null;
+		user = loggedInUser;
 	}
 
-	const { firstName, lastName, location, occupation, viewedProfile, impressions, friends } = user;
+	const {
+		_id,
+		firstName,
+		lastName,
+		picturePath,
+		location,
+		occupation,
+		viewedProfile,
+		impressions,
+		friends,
+	} = user;
 
 	return (
 		<WidgetWrapper>
 			{/* FIRST ROW */}
-			<FlexBetween gap="0.5rem" pb="1.1rem" onClick={() => navigate(`/profile/${userId}`)}>
+			<FlexBetween gap="0.5rem" pb="1.1rem" onClick={() => navigate(`/profile/${_id}`)}>
 				<FlexBetween gap="1rem">
 					<UserImage image={picturePath} />
 					<Box>

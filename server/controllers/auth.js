@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import asyncHandler from "express-async-handler";
+import generateToken from "../utils/generateToken.js";
 
 /* REGISTER USER */
 export const register = async (req, res) => {
@@ -31,7 +33,7 @@ export const register = async (req, res) => {
 };
 
 /* LOGGING IN */
-export const login = async (req, res) => {
+export const login = asyncHandler(async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		const user = await User.findOne({ email: email }).lean();
@@ -44,11 +46,20 @@ export const login = async (req, res) => {
 			return res.status(400).json({ msg: "Invalid credentials." });
 		}
 
-		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+		generateToken(res, user._id);
 		delete user.password;
 
-		res.status(200).json({ token, user });
+		res.status(201).json({ user });
 	} catch (err) {
 		res.status(500).json({ error: err.message });
 	}
+});
+
+/* LOGGING OUT */
+export const logout = async (req, res) => {
+	res.cookie("jwt", "", {
+		httpOnly: true,
+		expires: new Date(0),
+	});
+	res.status(200).json({ message: "User logged out" });
 };

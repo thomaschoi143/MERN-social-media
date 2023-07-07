@@ -21,15 +21,16 @@ import {
 	Close,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { setMode, setLogout } from "state";
+import { setMode, setLogout } from "slices/userSlice";
 import FlexBetween from "components/FlexBetween";
 import { useNavigate } from "react-router-dom";
+import { useLogoutMutation } from "slices/authApiSlice";
 
 const Navbar = () => {
 	const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const user = useSelector((state) => state.user);
+	const user = useSelector((state) => state.user.userInfo);
 	const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
 	const theme = useTheme();
@@ -41,6 +42,8 @@ const Navbar = () => {
 
 	const fullName = `${user.firstName} ${user.lastName}`;
 
+	const [logout] = useLogoutMutation();
+
 	return (
 		<FlexBetween padding="1rem 6%" backgroundColor={alt}>
 			<FlexBetween gap="1.75rem">
@@ -48,7 +51,7 @@ const Navbar = () => {
 					fontWeight="bold"
 					fontSize="clamp(1rem, 2rem, 2.25rem)"
 					color="primary"
-					onClick={() => navigate("/home")}
+					onClick={() => navigate("/")}
 					sx={{
 						"&:hover": {
 							color: primaryLight,
@@ -106,7 +109,15 @@ const Navbar = () => {
 							<MenuItem value={fullName}>
 								<Typography>{fullName}</Typography>
 							</MenuItem>
-							<MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+							<MenuItem
+								onClick={() => {
+									logout().then(() => {
+										dispatch(setLogout());
+									});
+								}}
+							>
+								Log Out
+							</MenuItem>
 						</Select>
 					</FormControl>
 				</FlexBetween>
@@ -173,7 +184,15 @@ const Navbar = () => {
 								<MenuItem value={fullName}>
 									<Typography>{fullName}</Typography>
 								</MenuItem>
-								<MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+								<MenuItem
+									onClick={() => {
+										logout().then(() => {
+											dispatch(setLogout());
+										});
+									}}
+								>
+									Log Out
+								</MenuItem>
 							</Select>
 						</FormControl>
 					</FlexBetween>

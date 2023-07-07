@@ -9,9 +9,9 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 
 function App() {
-	const mode = useSelector((state) => state.mode);
+	const mode = useSelector((state) => state.user.mode);
 	const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-	const isAuth = Boolean(useSelector((state) => state.token));
+	const isAuth = Boolean(useSelector((state) => state.user.userInfo));
 
 	return (
 		<div className="App">
@@ -19,11 +19,18 @@ function App() {
 				<ThemeProvider theme={theme}>
 					<CssBaseline />
 					<Routes>
-						<Route path="/" element={<LoginPage />} />
-						<Route path="/home" element={isAuth ? <HomePage /> : <Navigate to="/" />} />
+						<Route
+							path="/"
+							element={isAuth ? <HomePage /> : <Navigate to="/login" />}
+						/>
+						<Route
+							path="/login"
+							element={isAuth ? <Navigate to="/" /> : <LoginPage />}
+						/>
+
 						<Route
 							path="/profile/:userId"
-							element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
+							element={isAuth ? <ProfilePage /> : <Navigate to="/login" />}
 						/>
 					</Routes>
 				</ThemeProvider>

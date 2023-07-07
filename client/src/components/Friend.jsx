@@ -1,17 +1,17 @@
 import { PersonAddOutlined, PersonRemoveOutlined } from "@mui/icons-material";
 import { Box, IconButton, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { setFriends } from "state";
+import { setFriends } from "slices/userSlice";
 import UserImage from "./UserImage";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "./FlexBetween";
+import { useAddRemoveFriendMutation } from "slices/usersApiSlice";
 
 const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { _id } = useSelector((state) => state.user);
-	const token = useSelector((state) => state.token);
-	const friends = useSelector((state) => state.user.friends);
+	const { _id } = useSelector((state) => state.user.userInfo);
+	const friends = useSelector((state) => state.user.userInfo.friends);
 
 	const { palette } = useTheme();
 	const primaryLight = palette.primary.light;
@@ -21,15 +21,10 @@ const Friend = ({ friendId, name, subtitle, userPicturePath }) => {
 
 	const isFriend = friends.find((friend) => friend._id === friendId);
 
+	const [addRemoveFriend] = useAddRemoveFriendMutation();
+
 	const patchFriend = async () => {
-		const response = await fetch(`http://localhost:3001/users/${_id}/${friendId}`, {
-			method: "PATCH",
-			headers: {
-				Authorization: `Bearer ${token}`,
-				"Content-Type": "application/json",
-			},
-		});
-		const data = await response.json();
+		const data = await addRemoveFriend({ id: _id, friendId: friendId }).unwrap();
 		dispatch(setFriends({ friends: data }));
 	};
 
