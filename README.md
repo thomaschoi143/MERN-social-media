@@ -1,6 +1,9 @@
 # MERN-social-media
 A social media application with user authentication(with registration, using JWT, HTTP-cookie), likes, adding and removing friends, posting, commenting and dark mode features using MERN, Material UI, Redux(Redux Toolkit, RTK Query)...
 
+## Live Demo
+https://social-media-frontend-f325.onrender.com
+
 ## Preview
 
 ### Homepage
