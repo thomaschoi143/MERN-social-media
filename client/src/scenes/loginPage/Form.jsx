@@ -9,6 +9,7 @@ import { setLogin } from "slices/userSlice";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import { useLoginMutation, useRegisterMutation } from "slices/authApiSlice";
+import { toast } from "react-toastify";
 
 const registerSchema = yup.object().shape({
 	firstName: yup.string().required("required"),
@@ -60,25 +61,34 @@ const Form = () => {
 		}
 		formData.append("picturePath", values.picture.name);
 
-		const savedUser = await register(formData).unwrap();
-		onSubmitProps.resetForm();
+		try {
+			const savedUser = await register(formData).unwrap();
+			onSubmitProps.resetForm();
 
-		if (savedUser) {
-			setPageType("login");
+			if (savedUser) {
+				setPageType("login");
+			}
+		} catch (err) {
+			toast.error(err?.data?.message || err.error);
 		}
 	};
 
 	const loginHandler = async (values, onSubmitProps) => {
-		const loggedIn = await login(values).unwrap();
-		onSubmitProps.resetForm();
+		try {
+			const loggedIn = await login(values).unwrap();
+			onSubmitProps.resetForm();
 
-		if (loggedIn) {
-			dispatch(
-				setLogin({
-					user: loggedIn.user,
-				})
-			);
-			navigate("/");
+			if (loggedIn) {
+				dispatch(
+					setLogin({
+						user: loggedIn.user,
+					})
+				);
+				navigate("/");
+			}
+		} catch (err) {
+			console.log(err);
+			toast.error(err?.data?.message || err.error);
 		}
 	};
 
