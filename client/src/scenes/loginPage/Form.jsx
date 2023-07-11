@@ -50,7 +50,7 @@ const Form = () => {
 	const isRegister = pageType === "register";
 
 	const [login] = useLoginMutation();
-	const [register, { isLoading, error }] = useRegisterMutation();
+	const [register] = useRegisterMutation();
 
 	const registerHandler = async (values, onSubmitProps) => {
 		// allow us to send form info with image

@@ -11,7 +11,6 @@ import WidgetWrapper from "components/WidgetWrapper";
 
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useGetUserMutation } from "slices/usersApiSlice";
 
 const UserWidget = ({ user }) => {
 	const { palette } = useTheme();
@@ -21,8 +20,6 @@ const UserWidget = ({ user }) => {
 	const dark = palette.neutral.dark;
 	const medium = palette.neutral.medium;
 	const main = palette.neutral.main;
-
-	const [getUserProfile] = useGetUserMutation();
 
 	if (!user) {
 		user = loggedInUser;
