@@ -75,6 +75,7 @@ const Form = () => {
 
 	const loginHandler = async (values, onSubmitProps) => {
 		try {
+			throw new Error("error!");
 			const loggedIn = await login(values).unwrap();
 			onSubmitProps.resetForm();
 
