@@ -1,5 +1,7 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Form from "./Form";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
 	const theme = useTheme();
@@ -17,6 +19,7 @@ const LoginPage = () => {
 					Thomas's Social
 				</Typography>
 			</Box>
+			<ToastContainer />
 			<Box
 				width={isNonMobileScreens ? "50%" : "93%"}
 				p="2rem"
@@ -25,7 +28,9 @@ const LoginPage = () => {
 				backgroundColor={theme.palette.background.alt}
 			>
 				<Typography fontWeight="500" variant="h5" sx={{ mb: "1.5rem" }}>
-					Welcome to Thomas's Social, the Social Media for Sociopaths!
+					Welcome to Thomas's Social, the Social Media for Sociopaths! <br />
+					Testing Account: tomwong@gmail.com <br />
+					Password: 1234
 				</Typography>
 				<Form />
 			</Box>

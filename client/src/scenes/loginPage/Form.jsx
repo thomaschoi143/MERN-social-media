@@ -69,7 +69,7 @@ const Form = () => {
 				setPageType("login");
 			}
 		} catch (err) {
-			toast.error(err?.data?.message || err.error);
+			toast.error("Could not connect to the server.");
 		}
 	};
 
@@ -87,8 +87,7 @@ const Form = () => {
 				navigate("/");
 			}
 		} catch (err) {
-			console.log(err);
-			toast.error(err?.data?.message || err.error);
+			toast.error("Could not connect to the server.");
 		}
 	};
 
