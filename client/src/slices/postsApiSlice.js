@@ -9,18 +9,21 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 				url: `${POSTS_URL}/`,
 				method: "POST",
 				body: data,
+				credentials: "include",
 			}),
 		}),
 		getFeedPosts: builder.mutation({
 			query: (data) => ({
 				url: `${POSTS_URL}/`,
 				method: "GET",
+				credentials: "include",
 			}),
 		}),
 		getUserPosts: builder.mutation({
 			query: (data) => ({
 				url: `${POSTS_URL}/${data.id}/posts`,
 				method: "GET",
+				credentials: "include",
 			}),
 		}),
 		likePost: builder.mutation({
@@ -30,6 +33,7 @@ export const postsApiSlice = apiSlice.injectEndpoints({
 				body: {
 					userId: data.userId,
 				},
+				credentials: "include",
 			}),
 		}),
 	}),

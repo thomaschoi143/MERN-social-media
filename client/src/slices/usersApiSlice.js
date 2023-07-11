@@ -8,18 +8,21 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 			query: (data) => ({
 				url: `${USERS_URL}/${data.id}`,
 				method: "GET",
+				credentials: "include",
 			}),
 		}),
 		getUserFriends: builder.mutation({
 			query: (data) => ({
 				url: `${USERS_URL}/${data.id}/friends`,
 				method: "GET",
+				credentials: "include",
 			}),
 		}),
 		addRemoveFriend: builder.mutation({
 			query: (data) => ({
 				url: `${USERS_URL}/${data.id}/${data.friendId}`,
 				method: "PATCH",
+				credentials: "include",
 			}),
 		}),
 	}),
